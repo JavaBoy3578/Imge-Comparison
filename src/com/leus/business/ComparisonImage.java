@@ -64,7 +64,29 @@ public class ComparisonImage {
             }
         }
 
+        if (isVeryDifferentImages(comparedImagePixelArr)) {
+            System.out.println("Изображения слишком разные!");
+            System.exit(0);
+        }
+
         return comparedImagePixelArr;
+    }
+
+    private static boolean isVeryDifferentImages(int[][] comparedPixelArr) {
+        int count = 0;
+        for (int i = 0; i < heightImage; i++) {
+            for (int j = 0; j < widthImage; j++) {
+                if (comparedPixelArr[i][j] == 1) {
+                    count++;
+                }
+            }
+        }
+
+        if (count > widthImage * heightImage * 100 / 70) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private static void makeAreas(int[][] comparedPixelArr) {
@@ -87,6 +109,12 @@ public class ComparisonImage {
             return comparedPixelArr;
         }
 
+        if ((column == 0 || column == 1 && comparedPixelArr[column][row] == 0) || (row == 0 || row == 1 && comparedPixelArr[column][row] == 0) ||
+                (column == heightImage - 1 || column == heightImage - 2 && comparedPixelArr[column][row] == 0) ||
+                (row == widthImage - 1 || row == widthImage - 2 && comparedPixelArr[column][row] == 0)) {
+            return comparedPixelArr;
+        }
+
         boolean topPixel = false;
         boolean botPixel = false;
         boolean leftPixel = false;
@@ -96,35 +124,35 @@ public class ComparisonImage {
         boolean rightBotPixel = false;
         boolean leftBotPixel = false;
 
-        if (!(column - 2 < 0)) {
+        if (column - 2 >= 0) {
             topPixel = comparedPixelArr[column - 2][row] == 0;
         }
 
-        if (!(column + 2 >= heightImage)) {
+        if (column + 2 < heightImage) {
             botPixel = comparedPixelArr[column + 2][row] == 0;
         }
 
-        if (!(row - 2 < 0)) {
+        if (row - 2 >= 0) {
             leftPixel = comparedPixelArr[column][row - 2] == 0;
         }
 
-        if (!(row + 2 >= widthImage)) {
+        if (row + 2 < widthImage) {
             rightPixel = comparedPixelArr[column][row + 2] == 0;
         }
 
-        if (!(column - 2 < 0 && row - 2 < 0)) {
+        if (column - 2 >= 0 && row - 2 >= 0) {
             leftTopPixel = comparedPixelArr[column - 2][row - 2] == 0;
         }
 
-        if (!(column - 2 < 0 && row + 2 >= widthImage)) {
+        if (column - 2 >= 0 && row + 2 < widthImage) {
             rightTopPixel = comparedPixelArr[column - 2][row + 2] == 0;
         }
 
-        if (!(column + 2 >= heightImage && row + 2 >= widthImage)) {
+        if (column + 2 < heightImage && row + 2 < widthImage) {
             rightBotPixel = comparedPixelArr[column + 2][row + 2] == 0;
         }
 
-        if (!(column + 2 >= heightImage && row - 2 < 0)) {
+        if (column + 2 < heightImage && row - 2 >= 0) {
             leftBotPixel = comparedPixelArr[column + 2][row - 2] == 0;
         }
 
