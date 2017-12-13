@@ -82,7 +82,7 @@ public class ComparisonImage {
             }
         }
 
-        if (count > widthImage * heightImage * 100 / 70) {
+        if (count >= widthImage * heightImage / 100 * 60) {
             return true;
         } else {
             return false;
