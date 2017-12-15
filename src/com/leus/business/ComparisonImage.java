@@ -56,7 +56,7 @@ public class ComparisonImage {
 
                 if (firstImagePixelArr[i][j] == secondImagePixelArr[i][j]) {
                     comparedImagePixelArr[i][j] = 0;
-                } else if (100 * (secondImagePixelArr[i][j] - firstImagePixelArr[i][j]) / firstImagePixelArr[i][j] <= 10) {
+                } else if ((secondImagePixelArr[i][j] / firstImagePixelArr[i][j]) * 100 <= 10) {
                     comparedImagePixelArr[i][j] = 0;
                 } else {
                     comparedImagePixelArr[i][j] = 1;

@@ -1,47 +1,99 @@
 package com.leus;
 
+import com.leus.GUI.Display;
 import com.leus.IO.IOImage;
 import com.leus.business.ComparisonImage;
 
+import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class Runner {
 
+    private static BufferedImage firstImage = null;
+    private static BufferedImage secondImage = null;
+    private static BufferedImage resultImg = null;
+
     public static void main(String[] args) {
-        String pathImage1;
-        String pathImage2;
-        String resultPath;
 
-        System.out.println("Программа сравнит 2 изображения на соответствие");
-        System.out.println("Изображения должны быть одинакового размера!");
+        Display window = new Display();
+        window.createWindow("Image Comparison");
 
-        try(BufferedReader in = new BufferedReader(new InputStreamReader(System.in))) {
-            System.out.println("Укажите путь к первому изображению:");
-            pathImage1 = in.readLine();
-            BufferedImage firstImage = IOImage.loadImage(pathImage1);
+        JPanel panel = new JPanel();
 
-            System.out.println("Укажите путь к второму изображению:");
-            pathImage2 = in.readLine();
-            BufferedImage secondImage = IOImage.loadImage(pathImage2);
+        JButton firstImgPathButton = new JButton("Add path to first image");
+        JButton secondImgPathButton = new JButton("Add path to second image");
+        JButton resultButton = new JButton("Result");
+        JButton saveResultButton = new JButton("Save result");
 
-            if (firstImage.getWidth() != secondImage.getWidth() && firstImage.getHeight() != secondImage.getHeight()) {
-                System.out.println("Размеры изображений не равны!");
-                System.exit(1);
+        JLabel resultImgLabel = new JLabel();
+        JScrollPane scrollImg = new JScrollPane();
+
+        firstImgPathButton.addActionListener(e -> {
+            String path = JOptionPane.showInputDialog("Put path to first image");
+
+            if (path != null && !path.equals("")) {
+                try {
+                     firstImage = IOImage.loadImage(path);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Incorrect path!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Path is empty");
             }
+        });
 
-            System.out.println("Укажите путь для результата:");
-            resultPath = in.readLine();
+        secondImgPathButton.addActionListener(e -> {
+            String path = JOptionPane.showInputDialog("Put path to second image");
 
-            System.out.println("Выполняется сравнение...");
-            BufferedImage result = ComparisonImage.compareImages(firstImage, secondImage);
-            IOImage.saveImage(result, resultPath);
-            System.out.println("Выполнено!");
-        } catch (IOException e) {
-            System.out.println("Что-то пошло не так! Проверьте корректность путей!");
-            System.exit(1);
-        }
+            if (path != null && !path.equals("")) {
+                try {
+                    secondImage = IOImage.loadImage(path);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Incorrect path!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Path is empty");
+            }
+        });
+
+        resultButton.addActionListener(e -> {
+            if (firstImage != null && secondImage != null) {
+                resultImg = ComparisonImage.compareImages(firstImage, secondImage);
+                JOptionPane.showMessageDialog(null, "Done!");
+                resultImgLabel.setIcon(new ImageIcon(resultImg));
+                scrollImg.getViewport().add(resultImgLabel);
+            } else {
+                JOptionPane.showMessageDialog(null, "You don't select all images!");
+            }
+        });
+
+        saveResultButton.addActionListener(e -> {
+            if (resultImg != null) {
+                String path = JOptionPane.showInputDialog("Put path to result image");
+
+                if (path != null && !path.equals("")) {
+                    try {
+                        IOImage.saveImage(resultImg, path);
+                        JOptionPane.showMessageDialog(null, "Done!");
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(null, "Error, something went wrong!");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Path is empty!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "You haven't got result!");
+            }
+        });
+
+        panel.add(firstImgPathButton);
+        panel.add(secondImgPathButton);
+        panel.add(resultButton);
+        panel.add(saveResultButton);
+
+        window.addComponentNorth(panel);
+        window.addComponentCenter(resultImgLabel);
+        window.addComponentCenter(scrollImg);
     }
 }
