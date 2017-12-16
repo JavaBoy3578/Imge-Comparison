@@ -19,7 +19,7 @@ public class Runner {
         Display window = new Display();
         window.createWindow("Image Comparison");
 
-        JPanel panel = new JPanel();
+        JPanel buttonPanel = new JPanel();
 
         JButton firstImgPathButton = new JButton("Add path to first image");
         JButton secondImgPathButton = new JButton("Add path to second image");
@@ -87,12 +87,12 @@ public class Runner {
             }
         });
 
-        panel.add(firstImgPathButton);
-        panel.add(secondImgPathButton);
-        panel.add(resultButton);
-        panel.add(saveResultButton);
+        buttonPanel.add(firstImgPathButton);
+        buttonPanel.add(secondImgPathButton);
+        buttonPanel.add(resultButton);
+        buttonPanel.add(saveResultButton);
 
-        window.addComponentNorth(panel);
+        window.addComponentNorth(buttonPanel);
         window.addComponentCenter(resultImgLabel);
         window.addComponentCenter(scrollImg);
     }
