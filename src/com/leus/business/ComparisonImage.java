@@ -2,6 +2,7 @@ package com.leus.business;
 
 import com.leus.util.Converter;
 
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -56,7 +57,7 @@ public class ComparisonImage {
 
                 if (firstImagePixelArr[i][j] == secondImagePixelArr[i][j]) {
                     comparedImagePixelArr[i][j] = 0;
-                } else if ((secondImagePixelArr[i][j] / firstImagePixelArr[i][j]) * 100 <= 10) {
+                } else if (((secondImagePixelArr[i][j] - firstImagePixelArr[i][j]) / firstImagePixelArr[i][j]) * 100 <= 10) {
                     comparedImagePixelArr[i][j] = 0;
                 } else {
                     comparedImagePixelArr[i][j] = 1;
@@ -65,7 +66,7 @@ public class ComparisonImage {
         }
 
         if (isVeryDifferentImages(comparedImagePixelArr)) {
-            System.out.println("Изображения слишком разные!");
+            JOptionPane.showMessageDialog(null, "Images very different!");
             System.exit(0);
         }
 
