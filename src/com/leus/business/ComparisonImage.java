@@ -30,6 +30,9 @@ public class ComparisonImage {
 
         second = Converter.convertPixelArrToBufferedImage(secondImagePixelArr);
 
+        AREA.clear();
+        AREAS.clear();
+
         return second;
     }
 
