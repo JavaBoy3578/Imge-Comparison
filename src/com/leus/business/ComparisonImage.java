@@ -109,16 +109,75 @@ public class ComparisonImage {
     }
 
     private static int[][] findAreas(int[][] comparedPixelArr, int column, int row) {
-        if (column < 0 || column >= heightImage || row < 0 || row >= widthImage) {
+        if (isOutBound(column, row)) {
             return comparedPixelArr;
         }
 
+        if (isPixelOnBound(comparedPixelArr, column, row)) {
+            return comparedPixelArr;
+        }
+
+        if (isEndArea(comparedPixelArr, column, row)) {
+            return comparedPixelArr;
+        }
+
+        AREA.add(new Coordinate(column, row));
+        comparedPixelArr[column][row] = 0;
+
+        if (!AREA.contains(new Coordinate(column - 1, row))) {
+            comparedPixelArr = findAreas(comparedPixelArr, column - 1, row);
+        }
+
+        if (!AREA.contains(new Coordinate(column + 1, row))) {
+            comparedPixelArr = findAreas(comparedPixelArr, column + 1, row);
+        }
+
+        if (!AREA.contains(new Coordinate(column, row - 1))) {
+            comparedPixelArr = findAreas(comparedPixelArr, column, row - 1);
+        }
+
+        if (!AREA.contains(new Coordinate(column, row + 1))) {
+            comparedPixelArr = findAreas(comparedPixelArr, column, row + 1);
+        }
+
+        if (!AREA.contains(new Coordinate(column + 1, row + 1))) {
+            comparedPixelArr = findAreas(comparedPixelArr, column + 1, row + 1);
+        }
+
+        if (!AREA.contains(new Coordinate(column - 1, row - 1))) {
+            comparedPixelArr = findAreas(comparedPixelArr, column - 1, row - 1);
+        }
+
+        if (!AREA.contains(new Coordinate(column - 1, row + 1))) {
+            comparedPixelArr = findAreas(comparedPixelArr, column - 1, row + 1);
+        }
+
+        if (!AREA.contains(new Coordinate(column + 1, row - 1))) {
+            comparedPixelArr = findAreas(comparedPixelArr, column + 1, row - 1);
+        }
+
+        return comparedPixelArr;
+    }
+
+    private static boolean isOutBound(int column, int row) {
+        if (column < 0 || column >= heightImage || row < 0 || row >= widthImage) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static boolean isPixelOnBound(int[][] comparedPixelArr, int column, int row) {
         if ((column == 0 || column == 1 && comparedPixelArr[column][row] == 0) || (row == 0 || row == 1 && comparedPixelArr[column][row] == 0) ||
                 (column == heightImage - 1 || column == heightImage - 2 && comparedPixelArr[column][row] == 0) ||
                 (row == widthImage - 1 || row == widthImage - 2 && comparedPixelArr[column][row] == 0)) {
-            return comparedPixelArr;
+            return true;
         }
 
+        return false;
+    }
+
+    private static boolean isEndArea(int[][] comparedPixelArr, int column, int row) {
         boolean topPixel = false;
         boolean botPixel = false;
         boolean leftPixel = false;
@@ -160,46 +219,7 @@ public class ComparisonImage {
             leftBotPixel = comparedPixelArr[column + 2][row - 2] == 0;
         }
 
-        if (comparedPixelArr[column][row] == 0 && topPixel && botPixel && leftPixel && rightPixel && leftTopPixel && rightTopPixel && rightBotPixel && leftBotPixel) {
-            return comparedPixelArr;
-        }
-
-        AREA.add(new Coordinate(column, row));
-        comparedPixelArr[column][row] = 0;
-
-        if (!AREA.contains(new Coordinate(column - 1, row))) {
-            comparedPixelArr = findAreas(comparedPixelArr, column - 1, row);
-        }
-
-        if (!AREA.contains(new Coordinate(column + 1, row))) {
-            comparedPixelArr = findAreas(comparedPixelArr, column + 1, row);
-        }
-
-        if (!AREA.contains(new Coordinate(column, row - 1))) {
-            comparedPixelArr = findAreas(comparedPixelArr, column, row - 1);
-        }
-
-        if (!AREA.contains(new Coordinate(column, row + 1))) {
-            comparedPixelArr = findAreas(comparedPixelArr, column, row + 1);
-        }
-
-        if (!AREA.contains(new Coordinate(column + 1, row + 1))) {
-            comparedPixelArr = findAreas(comparedPixelArr, column + 1, row + 1);
-        }
-
-        if (!AREA.contains(new Coordinate(column - 1, row - 1))) {
-            comparedPixelArr = findAreas(comparedPixelArr, column - 1, row - 1);
-        }
-
-        if (!AREA.contains(new Coordinate(column - 1, row + 1))) {
-            comparedPixelArr = findAreas(comparedPixelArr, column - 1, row + 1);
-        }
-
-        if (!AREA.contains(new Coordinate(column + 1, row - 1))) {
-            comparedPixelArr = findAreas(comparedPixelArr, column + 1, row - 1);
-        }
-
-        return comparedPixelArr;
+        return comparedPixelArr[column][row] == 0 && topPixel && botPixel && leftPixel && rightPixel && leftTopPixel && rightTopPixel && rightBotPixel && leftBotPixel;
     }
 
     private static Coordinate findUpperPixelInArea() {
