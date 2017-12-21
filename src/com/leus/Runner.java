@@ -59,10 +59,14 @@ public class Runner {
 
         resultButton.addActionListener(e -> {
             if (firstImage != null && secondImage != null) {
-                resultImg = ComparisonImage.compareImages(firstImage, secondImage);
-                JOptionPane.showMessageDialog(null, "Done!");
-                resultImgLabel.setIcon(new ImageIcon(resultImg));
-                scrollImg.getViewport().add(resultImgLabel);
+                if (firstImage.getHeight() == secondImage.getHeight() && firstImage.getWidth() == secondImage.getWidth()) {
+                    resultImg = ComparisonImage.compareImages(firstImage, secondImage);
+                    JOptionPane.showMessageDialog(null, "Done!");
+                    resultImgLabel.setIcon(new ImageIcon(resultImg));
+                    scrollImg.getViewport().add(resultImgLabel);
+                } else {
+                    JOptionPane.showMessageDialog(null,"Images 'size aren't equal!");
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "You don't select all images!");
             }

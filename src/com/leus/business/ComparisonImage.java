@@ -15,6 +15,9 @@ public class ComparisonImage {
     private static final List<Coordinate> AREA = new ArrayList<>();
     private static final List<Area> AREAS = new ArrayList<>();
 
+    private ComparisonImage() {
+    }
+
     public static BufferedImage compareImages(BufferedImage first, BufferedImage second) {
         widthImage = first.getWidth();
         heightImage = first.getHeight();

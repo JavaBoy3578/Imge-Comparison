@@ -1,0 +1,1 @@
+start javaw -Xss64M -jar "Image Comparison".jar
